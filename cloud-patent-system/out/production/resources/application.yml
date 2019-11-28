@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: cloud-patent-management
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    #sihgyu
+    #password: 123456
+    url: jdbc:mysql://47.100.162.184:3306/patent?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+    password: sihgyu
+    #url: jdbc:mysql://localhost:3306/myproj?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+server:
+  port: 8080
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.sxf.entity
+  configuration:
+    mapUnderscoreToCamelCase: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    yourdaoclasspackagename: debug
+
+

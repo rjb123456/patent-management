@@ -1,0 +1,43 @@
+//group 'com.suixingpay'
+//version '1.0'
+//
+//allprojects {
+//    repositories {
+//        maven {
+//            name "aliyunmaven"
+//            url "http://maven.aliyun.com/nexus/content/groups/public/"
+//        }
+//    }
+//}
+buildscript { // buildscript 不能抽取出来，只能重复写。
+    ext{
+        sxGradleHome = "http://192.168.120.68/root/gradle-scripts/raw/master/"
+    }
+    apply from: sxGradleHome + "maven.gradle"
+    apply from: sxGradleHome + "spring-cloud-greenwich.gradle" // 导入使用Spring Cloud及相应的Spring Boot版本号
+    repositories {
+        maven { url REPOSITORY_URL }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:2.0.0")
+    }
+}
+
+subprojects {
+    // 参考 http://192.168.120.68/root/gradle-scripts
+    apply from: sxGradleHome + "maven.gradle"
+    apply from: sxGradleHome + "spring-cloud2.gradle"
+
+    version = "1.0.0-SNAPSHOT"  // 开发版本： -SNAPSHOT 正式版本：.RELEASE
+    group = "com.spark"
+    description = "spring boot in action"
+
+    dependencies {
+        annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+        compileOnly("org.springframework.boot:spring-boot-configuration-processor")
+        compileOnly('org.projectlombok:lombok')
+        testCompile('org.projectlombok:lombok')
+
+    }
+}

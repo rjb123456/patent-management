@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxf.dao.InformationDao">
+    <resultMap id="BaseResultMap" type="com.sxf.entity.CaseInformation">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="batch" property="batch" jdbcType="VARCHAR"/>
+        <result column="case_id" property="caseId" jdbcType="VARCHAR"/>
+        <result column="apply_no" property="applyNo" jdbcType="VARCHAR"/>
+        <result column="apply_date" property="applyDate" jdbcType="TIMESTAMP"/>
+        <result column="tec_contact" property="tecContact" jdbcType="VARCHAR"/>
+        <result column="apply_name" property="applyName" jdbcType="VARCHAR"/>
+        <result column="invention_name" property="inventionName" jdbcType="VARCHAR"/>
+        <result column="law_status" property="lawStatus" jdbcType="VARCHAR"/>
+        <result column="patent_type" property="patentType" jdbcType="VARCHAR"/>
+        <result column="inventor_name" property="inventorName" jdbcType="VARCHAR"/>
+        <result column="modifier_name" property="modifierName" jdbcType="VARCHAR"/>
+        <result column="account_id" property="accountId" jdbcType="VARCHAR"/>
+        <result column="is_check" property="isCheck" jdbcType="INTEGER"/>
+        <result column="is_new" property="isNew" jdbcType="INTEGER"/>
+        <result column="mark" property="mark" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="is_use" property="isUse" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="ResultMap" type="com.sxf.entity.TargetAndCaseInfoDTO">
+        <result column="target_id" property="targetId" jdbcType="VARCHAR"/>
+        <result column="case_id" property="caseId" jdbcType="VARCHAR"/>
+        <result column="law_status" property="lawStatus" jdbcType="VARCHAR"/>
+        <result column="apply_date" property="applyDate" jdbcType="TIMESTAMP"/>
+        <result column="inventor_name" property="inventorName" jdbcType="VARCHAR"/>
+        <result column="modifier_name" property="modifierName" jdbcType="VARCHAR"/>
+        <result column="apply_no" property="applyNo" jdbcType="VARCHAR"/>
+        <result column="invention_name" property="inventionName" jdbcType="VARCHAR"/>
+        <result column="apply_name" property="applyName" jdbcType="VARCHAR"/>
+        <result column="tec_contact" property="tecContact" jdbcType="VARCHAR"/>
+        <result column="mark" property="mark" jdbcType="VARCHAR"/>
+        <result column="patent_type" property="patentType" jdbcType="VARCHAR"/>
+        <result column="is_new" property="isNew" jdbcType="INTEGER"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="is_use" jdbcType="INTEGER" property="isUse"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="account_id" jdbcType="VARCHAR" property="accountId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id,batch,case_id,apply_no,apply_date,tec_contact,apply_name,invention_name,law_status,patent_type,inventor_name,modifier_name,account_id,is_check,is_new,mark,update_time,create_time,is_use
+  </sql>
+
+    <select id="getCaseInfo" resultType="com.sxf.entity.CaseInformation">
+        select
+        <include refid="Base_Column_List"/>
+        from case_information
+    </select>
+
+
+    <select id="selectCaseByAttribute" parameterType="com.sxf.entity.CaseInformation" resultMap="BaseResultMap">
+
+        select
+        s.invention_name,s.case_id,s.apply_no,s.apply_date,s.inventor_name,s.law_status,s.modifier_name,s.is_check from
+        case_information s
+        <where>
+            <if test="caseInformation.inventionName != null">
+                and s.invention_name like concat('%',#{caseInformation.inventionName},'%')
+            </if>
+            <if test="caseInformation.caseId != null">
+                and s.case_id like concat('%',#{caseInformation.caseId},'%')
+            </if>
+            <if test="caseInformation.applyNo != null">
+                and s.apply_no=#{caseInformation.applyNo}
+            </if>
+            <if test="caseInformation.applyDate != null">
+                and s.apply_date=#{caseInformation.applyDate}
+            </if>
+            <if test="caseInformation.inventorName != null">
+                and s.inventor_Name like concat('%',#{caseInformation.inventorName},'%')
+
+            </if>
+            <if test="caseInformation.lawStatus != null">
+                and s.law_status=#{caseInformation.lawStatus}
+            </if>
+            <if test="caseInformation.modifierName != null">
+                and s.modifier_name like concat('%',#{caseInformation.modifierName},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getCaseDetail" resultMap="ResultMap" parameterType="java.lang.String">
+        select s.is_use,s.batch,s.update_time,s.create_time,s.patent_type,s.account_id,s.is_check,
+        s.is_new,s.invention_name,s.apply_no ,s.apply_date,s.law_status,s.apply_name,s.inventor_name ,s.modifier_name ,s.tec_contact,s.mark,s.case_id ,t.target_id
+         FROM case_information s LEFT JOIN case_target t on t.case_id = s.case_id where s.apply_no=#{applyNo}
+</select>
+
+
+
+</mapper></mapper>
