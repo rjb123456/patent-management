@@ -42,7 +42,6 @@ public class TargetController {
         }
 
         map.put("list", caseTargetList.isEmpty() ? null : caseTargetList);
-
         map.put("code", 0);
 
         return new SuccessResult("查询成功", map);

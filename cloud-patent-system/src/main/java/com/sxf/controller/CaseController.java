@@ -204,7 +204,7 @@ public class CaseController {
     @SystemLog(methods = "认领详情", module = "流程历史")
     @RequestMapping(value = "/getCaseStatus", method = RequestMethod.POST)
     public Result getCaseStatus(@RequestBody CaseStatus caseStatus){
-        String applyNo =caseStatus.getApplyNo();
+        String applyNo = caseStatus.getApplyNo();
         Map<String, Object> map = new HashMap<>();
         List<CaseStatus> caseTarget = new ArrayList<>();
         try {
