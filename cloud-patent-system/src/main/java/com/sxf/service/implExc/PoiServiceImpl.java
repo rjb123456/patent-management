@@ -1,13 +1,13 @@
 package com.sxf.service.implExc;
 
 import com.sxf.entity.CaseInformation;
+import com.sxf.entity.TargetAndCaseInfoDTO;
 import com.sxf.mock.Pcd;
 import com.sxf.service.PoiService;
 import com.sxf.utils.DataGeneratorUtil;
 import com.sxf.utils.ExcelUtil;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class PoiServiceImpl implements PoiService {
     @Override
     public String exports(HttpServletResponse response,List<CaseInformation> dataListT) {
         try {
-            CaseInformation Pcd = new CaseInformation();
+            TargetAndCaseInfoDTO Pcd = new TargetAndCaseInfoDTO();
             List<Pcd> listPcd = DataGeneratorUtil.generatorPcd(dataListT);
             String fileName="指标详情信息表";
             List<Map<String,Object>> list=createExcelRecords(listPcd);

@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sxf.dao.TargetDao">
-    <insert id="addTarget" parameterType="com.sxf.entity.CaseTarget">
+    <insert id="addTarget" parameterType="com.sxf.entity.CaseTarget" >
         insert into `case_target`
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
                 `id`,
             </if>
-            <if test="caseId != null">
+            <if test="caseId != null" >
                 `case_id`,
             </if>
-            <if test="targetId != null">
+            <if test="targetId != null" >
                 `target_id`,
             </if>
-            <if test="updateTime != null">
+            <if test="updateTime != null" >
                 `update_time`,
             </if>
-            <if test="createTime != null">
+            <if test="createTime != null" >
                 `create_time`,
             </if>
-            <if test="isUsed != null">
+            <if test="isUse != null" >
                 `is_use`,
             </if>
-            <if test="modifierName != null">
+            <if test="modifierName != null" >
                 `modifier_name`,
             </if>
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
                 #{id,jdbcType=BIGINT},
             </if>
-            <if test="caseId != null">
+            <if test="caseId != null" >
                 #{caseId,jdbcType=VARCHAR},
             </if>
-            <if test="targetId != null">
+            <if test="targetId != null" >
                 #{targetId,jdbcType=VARCHAR},
             </if>
-            <if test="updateTime != null">
+            <if test="updateTime != null" >
                 #{updateTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="createTime != null">
+            <if test="createTime != null" >
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="isUsed != null">
-                #{isUsed,jdbcType=VARCHAR},
+            <if test="isUse != null" >
+                #{isUse,jdbcType=VARCHAR},
             </if>
-            <if test="modifierName != null">
+            <if test="modifierName != null" >
                 #{modifierName,jdbcType=VARCHAR},
             </if>
         </trim>
@@ -94,26 +94,25 @@
             resultType="com.sxf.entity.TargetAndCaseInfoDTO">
 
         select
-        s.case_id,
-        t.target_id,s.apply_no,s.invention_name,s.law_status,s.apply_date,s.inventor_name,t.modifier_name,s.is_check
+        s.case_id, t.target_id,s.apply_no,s.invention_name,s.law_status,s.apply_date,s.inventor_name,t.modifier_name,s.is_check
         from case_information s left join case_target t on t.case_id = s.case_id
         <where>
-            <if test="targetAndCaseInfoDTO.targetId != null">
+            <if test="targetAndCaseInfoDTO.targetId != null and targetAndCaseInfoDTO.targetId != ''  ">
                 and t.target_id like concat('%',#{targetAndCaseInfoDTO.targetId},'%')
             </if>
-            <if test="targetAndCaseInfoDTO.inventionName != null">
+            <if test="targetAndCaseInfoDTO.inventionName != null and targetAndCaseInfoDTO.inventionName != '' ">
                 and s.invention_name like concat('%',#{targetAndCaseInfoDTO.inventionName},'%')
             </if>
-            <if test="targetAndCaseInfoDTO.applyNo != null">
+            <if test="targetAndCaseInfoDTO.applyNo != null and targetAndCaseInfoDTO.applyNo != '' ">
                 and s.apply_no=#{targetAndCaseInfoDTO.applyNo}
             </if>
-            <if test="targetAndCaseInfoDTO.applyDate != null">
+            <if test="targetAndCaseInfoDTO.applyDate != null and targetAndCaseInfoDTO.applyDate != '' ">
                 and s.apply_date=#{targetAndCaseInfoDTO.applyDate}
             </if>
-            <if test="targetAndCaseInfoDTO.inventorName != null">
+            <if test="targetAndCaseInfoDTO.inventorName != null and targetAndCaseInfoDTO.inventorName != '' ">
                 and s.inventor_name like concat('%',#{targetAndCaseInfoDTO.inventorName},'%')
             </if>
-            <if test="targetAndCaseInfoDTO.lawStatus != null">
+            <if test="targetAndCaseInfoDTO.lawStatus != null and targetAndCaseInfoDTO.lawStatus != '' ">
                 and s.law_status=#{targetAndCaseInfoDTO.lawStatus}
             </if>
         </where>
@@ -130,7 +129,7 @@
         <include refid="Base_Column_List"/>
         from case_target
         <where>
-            <if test="case_id != null">
+            <if test="caseId != null">
                 case_id=#{caseId}
             </if>
         </where>
@@ -145,5 +144,6 @@
         </set>
         where `case_id` = #{caseTarget.caseId}
     </update>
+
 
 </mapper>

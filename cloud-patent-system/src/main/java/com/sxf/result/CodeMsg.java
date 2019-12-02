@@ -15,6 +15,7 @@ public class CodeMsg {
 	public static CodeMsg SUCCESS = new CodeMsg(0, "success");
 	public static CodeMsg SERVER_ERROR = new CodeMsg(500100, "服务端异常");
 	public static CodeMsg BIND_ERROR = new CodeMsg(500101, "参数校验异常：%s");
+	public static CodeMsg EXCEPTION_ERROR = new CodeMsg(500104, "后端发生异常：%s");
 	public static CodeMsg REQUEST_ILLEGAL = new CodeMsg(500102, "请求违法");
 	public static CodeMsg ACCESS_LIMIT_REACHED = new CodeMsg(500103, "访问太频繁");
 
@@ -31,6 +32,7 @@ public class CodeMsg {
 	//文件模块 5003XX
 	public static CodeMsg UPLOAD_FAILED = new CodeMsg(5000317,"文件上传失败");
 	public static CodeMsg DOWNLOAD_FAILED = new CodeMsg(5000318,"文件下载失败");
+	public static CodeMsg SECOND_CHECK_FAILED = new CodeMsg(5000318,"交底书上传未通过，请重新上传");
 
 	//对表操作模块 5004XX
 	public static CodeMsg CHANGE_CS_FAILED = new CodeMsg(5000417,"对专利状态表操作失败");

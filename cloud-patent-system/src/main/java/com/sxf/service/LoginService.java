@@ -52,6 +52,9 @@ public class LoginService {
         if (StringUtils.isBlank(password)) {
             throw new GlobalException(CodeMsg.PASSWORD_EMPTY);
         }
+        if("admin".equals(accountId)){
+            throw new GlobalException(CodeMsg.IS_NOT_ADMIN);
+        }
         CaseAccount caseAccount = null;
         caseAccount = accountDao.getByAccountId(accountId);
         if (caseAccount == null) {

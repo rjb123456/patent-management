@@ -1,6 +1,7 @@
 package com.sxf.dao;
 
 import com.sxf.entity.CaseInformation;
+import com.sxf.entity.CaseStatus;
 import com.sxf.entity.TargetAndCaseInfoDTO;
 import org.apache.ibatis.annotations.*;
 
@@ -36,7 +37,7 @@ public interface CaseInfoDao {
      * @param caseInformation 专利信息
      * @return
      */
-    @Update({"update ", TABLE_NAME, " set modifier_name=#{modifierName} , account_id=#{accountId} where id=#{id}"})
+    @Update({"update ", TABLE_NAME, " set modifier_name=#{modifierName} , account_id=#{accountId} , law_status=#{lawStatus} where id=#{id}"})
     int update(CaseInformation caseInformation);
 
 
@@ -99,11 +100,10 @@ public interface CaseInfoDao {
     /**
      * 查询需要审核的专利(包含两次审核)
      *
-     * @param isCheck
      * @return
      */
-    @Select({"select ", FIELDS, " from ", TABLE_NAME, "where is_check = #{is_check}"})
-    List<CaseInformation> getAdminCheckList(@Param("is_check") int isCheck);
+    @Select({"select ", FIELDS, " from ", TABLE_NAME, "where is_check = 1"})
+    List<CaseInformation> getAdminCheckList();
 
     /**
      * 按caseId获取专利信息
@@ -111,8 +111,8 @@ public interface CaseInfoDao {
      * @param caseId
      * @return
      */
-    @Select({"select ", FIELDS, " from ", TABLE_NAME, "where case_id = #{case_id}"})
-    CaseInformation getByCaseId(@Param("case_id") String caseId);
+    @Select({"select ", FIELDS, " from ", TABLE_NAME, "where case_id = #{caseId}"})
+    CaseInformation getByCaseId(@Param("caseId") String caseId);
 
 
     /**
@@ -121,7 +121,7 @@ public interface CaseInfoDao {
      * @param applyNo
      * @return
      */
-    CaseInformation getCaseInfoByCaseId(@Param("caseId") String caseId,@Param("applyNo") String applyNo);
+    CaseInformation getCaseInfoByCaseId(@Param("caseId") String caseId, @Param("applyNo") String applyNo);
 
 
     /**
@@ -144,4 +144,21 @@ public interface CaseInfoDao {
      * @Param applyNo 申请号
      */
     List<TargetAndCaseInfoDTO> getCaseDetail(String applyNo);
+
+
+    /**
+     * 查看我的认领详情，流程历史
+     * @Param applyNo 申请号
+     */
+    List<CaseStatus> getCaseStatus(String applyNo);
+
+    /**
+     * 依据属性查询专利信息为导出Excel服务
+     *
+     * @return
+     * @Param caseInformation
+     */
+
+    List<CaseInformation> selectCaseExcel(@Param("caseInformation") CaseInformation caseInformation);
+
 }

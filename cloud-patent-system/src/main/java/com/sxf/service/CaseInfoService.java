@@ -3,6 +3,7 @@ package com.sxf.service;
 import com.sxf.dao.CaseInfoDao;
 import com.sxf.dao.CaseInfoTarget;
 import com.sxf.entity.CaseInformation;
+import com.sxf.entity.CaseStatus;
 import com.sxf.entity.TargetAndCaseInfoDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,12 @@ public class CaseInfoService {
         System.out.println(caseInfoDao.getCaseDetail(applyNo));
         return caseInfoDao.getCaseDetail(applyNo);
     }
-
+    /**
+     *根据属性查询当前页面专利信息为生成Excel提供服务
+     * @param
+     * @return
+     */
+    public List<CaseInformation> selectCaseExcel(@RequestBody CaseInformation caseInformation){return caseInfoDao.selectCaseExcel(caseInformation);}
 
     public CaseInformation getById(int id) {
         return caseInfoDao.getById(id);
@@ -95,8 +101,8 @@ public class CaseInfoService {
         caseInformation.setIsUse(1);
         //记录标识默认正常
         caseInformation.setIsNew(1);
-
         caseInformation.setLawStatus("1");
+        // System.out.println(caseInformation + "****************************************");
         caseInfoDao.addCaseInfo(caseInformation);
     }
 
@@ -117,12 +123,12 @@ public class CaseInfoService {
      */
     public List<CaseInformation> getAdminCheckList(int isFirst) {
         //1 表示待审核
-        List<CaseInformation> caseInformationList = caseInfoDao.getAdminCheckList(1);
+        List<CaseInformation> caseInformationList = caseInfoDao.getAdminCheckList();
         List<CaseInformation> temp = new ArrayList<>();
         if (isFirst == 1) {
             //第一次审核
             for (CaseInformation ci : caseInformationList) {
-                if (ci.getAccountId() == null) {
+                if ("".equals(ci.getAccountId()) || ci.getAccountId() == null) {
                     temp.add(ci);
                 }
             }
@@ -130,7 +136,7 @@ public class CaseInfoService {
         } else {
             //第二次审核
             for (CaseInformation ci : caseInformationList) {
-                if (ci.getAccountId() != null) {
+                if (!"".equals(ci.getAccountId())) {
                     temp.add(ci);
                 }
             }
@@ -151,4 +157,13 @@ public class CaseInfoService {
     public CaseInformation getCaseInfoByCaseId(String caseId,String applyNo){
         return caseInfoDao.getCaseInfoByCaseId(caseId,applyNo);
     }
+
+    /**
+     * 查看我的认领详情，流程历史
+     * @Param applyNo 申请号
+     */
+    public  List<CaseStatus> getCaseStatus(String applyNo){
+        return caseInfoDao.getCaseStatus(applyNo);
+    }
+
 }

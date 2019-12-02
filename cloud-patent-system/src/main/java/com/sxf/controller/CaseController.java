@@ -4,20 +4,23 @@ package com.sxf.controller;
 import com.sxf.dao.CaseInfoTarget;
 import com.sxf.entity.CaseInformation;
 import com.sxf.entity.CaseStatus;
-import com.sxf.entity.CaseTarget;
-//import com.sxf.log.SystemLog;
 import com.sxf.entity.TargetAndCaseInfoDTO;
+import com.sxf.exception.GlobalException;
+import com.sxf.log.SystemLog;
+import com.sxf.result.CodeMsg;
 import com.sxf.service.CaseInfoService;
 import com.sxf.service.CaseStatusService;
 import com.sxf.service.CaseTargetService;
 import com.sxf.utils.FailureResult;
 import com.sxf.utils.Result;
 import com.sxf.utils.SuccessResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+@Slf4j
 @RestController
 public class CaseController {
     @Autowired
@@ -28,91 +31,87 @@ public class CaseController {
     @Autowired
     CaseStatusService caseStatusService;
 
+    /**
+     * 专利更改
+     * @param caseInformation 前端传回的专利信息
+     * @return 更改成功  更改出错
+     */
+    @SystemLog(methods = "专利更改", module = "专利更改")
+    @PostMapping("/change")
+    public com.sxf.result.Result<String> changeCase(@RequestBody CaseInformation caseInformation){
+        CaseInformation ci = caseInfoService.getByCaseId(caseInformation.getCaseId());
 
- /*   @RequestMapping("/addCaseIDD")
-    public Map<String,String> ad(){
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("code","123");
-        return  map;
-    }*/
+        log.info(caseInformation.toString());
+        caseInformation.setId(ci.getId());
+        caseInformation.setIsCheck(ci.getIsCheck());
+        caseInformation.setIsNew(ci.getIsUse());
+        caseInformation.setIsUse(ci.getIsUse());
+        caseInformation.setPatentType(ci.getPatentType());
+        caseInformation.setAccountId(ci.getAccountId());
+        caseInformation.setModifierName(ci.getModifierName());
+        caseInformation.setApplyName(ci.getApplyName());
+        caseInformation.setBatch(ci.getBatch());
+
+        caseInformation.setCreateTime(ci.getCreateTime());
+        caseInformation.setUpdateTime(new Date());
+        try{
+            caseInfoService.changeCaseInfo(caseInformation);
+        }catch (Exception e){
+            log.info("更改出错");
+            throw new GlobalException(CodeMsg.CHANGE_CI_FAILED);
+        }
+        return com.sxf.result.Result.success("更改成功");
+    }
+
     /**
      * @param
      * @param
      * @return String 0 是失败   1是成功
      * 添加专利，生成指标
      */
-    //@SystemLog(methods = "专利列表", module = "专利申添请加")
+    @SystemLog(methods = "专利列表", module = "专利申添请加")
     @RequestMapping("/addCase")
-    public Map<String,String> addCase(@RequestBody CaseInfoTarget caseInfoTarget) {
-        System.out.println(caseInfoTarget);
-        String targetId = caseInfoTarget.getTargetId();
-        String applyNo = caseInfoTarget.getApplyNo();
-        System.out.println(targetId);
+    public Map<String, String> addCase(@RequestBody CaseInfoTarget caseInfoTarget) {
+        log.info("caseInfoTarget={}",caseInfoTarget);
         CaseInformation caseInformation = caseInfoService.getCaseInfo(caseInfoTarget);
-        System.out.println(caseInformation);
+        log.info("caseInformation={}",caseInformation);
+        Map<String, String> map = new HashMap<String, String>();
         String flag = "0";
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("code",flag);
-        if (caseInfoTarget.getCaseId() == null || caseInfoTarget.getCaseId().trim().equals("")){
+        map.put("code", flag);
+        if (caseInfoTarget.getCaseId() == null || "".equals(caseInfoTarget.getCaseId().trim())) {
             return map;
         }
-        if (caseInfoTarget.getApplyNo() == null || caseInfoTarget.getApplyNo().trim().equals("")){
-            return  map;
-        }
-        //判断
-        if (targetId == null || targetId.trim().equals("") ) {
+        if (caseInfoTarget.getApplyNo() == null || caseInfoTarget.getApplyNo().trim().equals("")) {
             return map;
         }
-
-        String caseId=caseInformation.getCaseId();
-        if(caseInfoService.getCaseInfoByCaseId(caseId,applyNo) != null){
+        if (caseInfoTarget.getTargetId() == null || "".equals(caseInfoTarget.getTargetId().trim())) {
+            return map;
+        }
+        if (caseInfoService.getCaseInfoByCaseId(caseInformation.getCaseId(), caseInfoTarget.getApplyNo()) != null) {
             flag = "caseId重复或者applyNo重复";
-            map.put("code",flag);
-            return  map;
-        }else {
+            map.put("code", flag);
+            return map;
+        } else {
             flag = "1";
-            map.put("code",flag);
+            map.put("code", flag);
         }
+        /**
+         *
+         * 添加专利状态初始化
+         */
+        caseStatusService.addCaseStatus(caseInformation);
+        /**
+         * 初始化指标对象
+         */
 
-            /**
-             *
-             * 添加专利状态初始化
-             */
-            CaseStatus caseStatus = new CaseStatus();
-            caseStatus.setCaseId(caseInformation.getCaseId());
-            caseStatus.setApplyNo(caseInformation.getApplyNo());
-            caseStatus.setApplyDate(new Date());
-            caseStatus.setInventionName(caseInformation.getInventionName());
-            caseStatus.setCreateTime(new Date());
-            caseStatus.setUpdateTime(new Date());
-            caseStatus.setIsUse(1);
-            caseStatus.setStatus(0);
-            caseStatus.setInventorName(caseInformation.getInventorName());
-            // caseStatus.setModifierName();
+        caseTargetService.addTarget(caseInfoTarget);
+        /**
+         *
+         *添加专利
+         */
+        caseInfoService.addCase(caseInformation);
 
-            //添加专利
-            caseStatusService.addCaseStatus(caseStatus);
-            /**
-             * 初始化指标对象
-             */
-            CaseTarget caseTarget = new CaseTarget();
-            System.out.println(targetId);
-            caseTarget.setTargetId(targetId);
-            //指标
-            caseTarget.setCaseId(caseInformation.getCaseId());
-            //更新时间和创建时间
-            caseTarget.setUpdateTime(new Date());
-            //更新时间和创建时间
-            caseTarget.setCreateTime(new Date());
-            caseTarget.setIsUsed("1");
-            //添加
-            caseTargetService.addTarget(caseTarget);
-            //添加指标
-            caseInfoService.addCase(caseInformation);
-            //添加专利
-            return  map;
-
-
+        return map;
     }
 
 
@@ -121,6 +120,7 @@ public class CaseController {
      *
      * @return
      */
+    @SystemLog(methods = "专利列表", module = "查询所有专利信息")
     @RequestMapping(value = "/getCaseInfo", method = RequestMethod.POST)
     public Result getCaseInfo() {
         Map<String, Object> map = new HashMap<>();
@@ -141,6 +141,7 @@ public class CaseController {
      * @param
      * @return
      */
+    @SystemLog(methods = "专利列表", module = "根据各个属性查询专利")
     @PostMapping("/getCaseList")
     public Result getCaseList(@RequestBody CaseInformation caseInformation) {
         Map<String, Object> map = new HashMap<>();
@@ -175,11 +176,14 @@ public class CaseController {
      * @param
      * @return
      */
+    @SystemLog(methods = "单个专利", module = "专利详情")
     @RequestMapping(value = "/getCaseDetail", method = RequestMethod.POST)
     public Result getCaseDetail(@RequestBody TargetAndCaseInfoDTO targetAndCaseInfoDTO) {
 
         String applyNo = targetAndCaseInfoDTO.getApplyNo();
-        System.out.println(applyNo + "_______________________________________________________");
+
+        log.info(targetAndCaseInfoDTO.toString());
+
         Map<String, Object> map = new HashMap<>();
         List<TargetAndCaseInfoDTO> caseTarget = new ArrayList<>();
         try {
@@ -191,4 +195,27 @@ public class CaseController {
         map.put("list", caseTarget.isEmpty() ? null : caseTarget);
         return new SuccessResult("查询成功", map);
     }
+
+
+    /**
+     * 查看我的认领详情，流程历史
+     * @Param applyNo 申请号
+     */
+    @SystemLog(methods = "认领详情", module = "流程历史")
+    @RequestMapping(value = "/getCaseStatus", method = RequestMethod.POST)
+    public Result getCaseStatus(@RequestBody CaseStatus caseStatus){
+        String applyNo =caseStatus.getApplyNo();
+        Map<String, Object> map = new HashMap<>();
+        List<CaseStatus> caseTarget = new ArrayList<>();
+        try {
+            caseTarget = caseInfoService.getCaseStatus(applyNo);
+            System.out.println(caseTarget.toString()+"--------------------------------------------");
+        } catch (Exception e) {
+            return new FailureResult("查询失败", null);
+        }
+        map.put("list", caseTarget.isEmpty() ? null : caseTarget);
+        return new SuccessResult("查询成功", map);
+    }
+
+
 }

@@ -19,7 +19,6 @@ public class WebInterceptor implements HandlerInterceptor {
         boolean flag =true;
         CaseAccount caseAccount=(CaseAccount) request.getSession().getAttribute("CA");
         if(caseAccount == null){
-            response.sendRedirect("login");
             System.out.println("还未登录");
             flag = false;
         }else{

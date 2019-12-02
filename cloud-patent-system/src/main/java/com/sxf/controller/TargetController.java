@@ -2,6 +2,7 @@ package com.sxf.controller;
 
 import com.sxf.entity.CaseTarget;
 import com.sxf.entity.TargetAndCaseInfoDTO;
+import com.sxf.log.SystemLog;
 import com.sxf.service.TargetService;
 import com.sxf.utils.FailureResult;
 import com.sxf.utils.Result;
@@ -29,6 +30,7 @@ public class TargetController {
      *
      * @return
      */
+    @SystemLog(methods = "指标详情", module = "查询指标详情")
     @RequestMapping(value = "/getTargetInfo", method = RequestMethod.POST)
     public Result getTargetInfo() {
         Map<String, Object> map = new HashMap<>();
@@ -53,14 +55,14 @@ public class TargetController {
      * @param targetAndCaseInfoDTO 对象
      * @return
      */
+    @SystemLog(methods = "指标查询", module = "联合查询指标")
     @RequestMapping(value = "/getTargetList", method = RequestMethod.POST)
     public Result getCaseInfo(@RequestBody TargetAndCaseInfoDTO targetAndCaseInfoDTO) {
-        log.info(targetAndCaseInfoDTO.getLawStatus()+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4");
         Map<String, Object> map = new HashMap<>();
         List<TargetAndCaseInfoDTO> tarList = new ArrayList<>();
         try {
             tarList = targetService.getList(targetAndCaseInfoDTO);
-            System.out.println(tarList.toString()+"***********************");
+            log.info(tarList.toString()+"***********************");
         } catch (Exception e) {
             System.out.println(e);
             return new FailureResult("查询列表失败", null);
@@ -93,6 +95,7 @@ public class TargetController {
      * @param targetAndCaseInfoDTO 指标详情   专利名称
      * @return
      */
+    @SystemLog(methods = "指标详情", module = "指标详情")
     @RequestMapping(value = "/getTargetDetail", method = RequestMethod.POST)
     public Result getTargetDetail(@RequestBody TargetAndCaseInfoDTO targetAndCaseInfoDTO) {
         String targetId = targetAndCaseInfoDTO.getTargetId();
@@ -101,7 +104,7 @@ public class TargetController {
         Map<String, Object> map = new HashMap<>();
         List<TargetAndCaseInfoDTO> caseTarget = new ArrayList<>();
         try {
-          caseTarget=  targetService.getTargetDetail("123456", "啥也不是");
+          caseTarget=  targetService.getTargetDetail(targetId, inventionName);
           System.out.println(caseTarget.toString()+"************************我沒錯");
 
         } catch (Exception e) {

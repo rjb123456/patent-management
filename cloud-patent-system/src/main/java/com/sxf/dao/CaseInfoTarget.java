@@ -24,6 +24,6 @@ public class CaseInfoTarget {
     private String mark;
     private Date updateTime;
     private Date createTime;
-    private int isUsed;
+    private int isUse;
     private String targetId;
 }

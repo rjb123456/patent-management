@@ -29,7 +29,7 @@ public interface CaseFileDao {
             @Result(column="case_id", property="caseId", id=true),
             @Result(column="file_path", property="filePath"),
             @Result(column="file_type", property="fileType"),
-            @Result(column="is_use", property="isUsed"),
+            @Result(column="is_use", property="isUse"),
             @Result(column="create_time", property="createTime"),
             @Result(column="update_time", property="updateTime")})
     List<CaseFile> getByCaseId(@Param("case_id") String caseId);
@@ -40,14 +40,14 @@ public interface CaseFileDao {
      * @param caseFile
      * @return
      */
-    @Insert({"insert into ", TABLE_NAME, "(", FIELD, ") values (#{caseId},#{filePath},#{fileType},#{isUsed},#{createTime},#{updateTime})"})
+    @Insert({"insert into ", TABLE_NAME, "(", FIELD, ") values (#{caseId},#{filePath},#{fileType},#{isUse},#{createTime},#{updateTime})"})
     int insertCaseFile(CaseFile caseFile);
 
     /**
      * 更新专利文件的使用状态
      * @param caseFile
      */
-    @Update({"update ",TABLE_NAME," set is_use=#{isUsed}, update_time=#{updateTime} where case_id=#{caseId} and file_type=#{fileType}"})
+    @Update({"update ",TABLE_NAME," set is_use=#{isUse}, update_time=#{updateTime} where case_id=#{caseId} and file_type=#{fileType}"})
     void update(CaseFile caseFile);
 
     /**
@@ -56,5 +56,5 @@ public interface CaseFileDao {
      * @return
      */
     @Select({"select ",FIELD," from ",TABLE_NAME,"where case_id=#{case_id} and file_type=1 and is_use=0"})
-    CaseFile forSecondCheck(@Param("case_id")String caseId);
+    CaseFile forSecondCheck(@Param("case_id") String caseId);
 }

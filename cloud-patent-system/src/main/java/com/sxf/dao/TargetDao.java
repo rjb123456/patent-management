@@ -51,5 +51,5 @@ public interface TargetDao {
     CaseTarget getTargetByCaseId(@Param("caseId") String caseId);
 
 
-    void updateCaseTarget(@Param("caseTarget")CaseTarget caseTarget);
+    void updateCaseTarget(@Param("caseTarget") CaseTarget caseTarget);
 }

@@ -15,7 +15,7 @@ public class CaseFile {
     private String caseId;
     private String filePath;
     private int fileType;
-    private int isUsed;
+    private int isUse;
     private Date createTime;
     private Date updateTime;
 

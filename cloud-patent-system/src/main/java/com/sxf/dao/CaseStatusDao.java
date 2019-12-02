@@ -43,12 +43,13 @@ public interface CaseStatusDao {
 
     /**
      *
-     * @param case_id
+     * @param caseId
      * @param status
      * @return
      */
-    @Update({"update" , TABLE_NAME, " set status=#{status} where case_id=#{case_id}"})
-    int updateCaseStatuss(String case_id,int status);
+    @Update({"update" , TABLE_NAME, " set status=#{status} where case_id=#{caseId}"})
+    int updateCaseStatuss(@Param("caseId") String caseId,
+                          @Param("status") int status);
 
     /**
      * 添加专利状态

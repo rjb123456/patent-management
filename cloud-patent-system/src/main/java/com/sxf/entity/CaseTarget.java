@@ -17,7 +17,7 @@ public class CaseTarget {
     private String targetId;
     private Date updateTime;
     private Date createTime;
-    private String isUsed;
+    private String isUse;
     private String modifierName;
 
 }

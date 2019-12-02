@@ -1,160 +1,173 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sxf.dao.CaseInfoDao" >
+<mapper namespace="com.sxf.dao.CaseInfoDao">
 
-<resultMap id="BaseResultMap" type="com.sxf.entity.CaseInformation">
-    <id column="id" property="id" jdbcType="BIGINT"/>
-    <result column="batch" property="batch" jdbcType="VARCHAR"/>
-    <result column="case_id" property="caseId" jdbcType="VARCHAR"/>
-    <result column="apply_no" property="applyNo" jdbcType="VARCHAR"/>
-    <result column="apply_date" property="applyDate" jdbcType="TIMESTAMP"/>
-    <result column="tec_contact" property="tecContact" jdbcType="VARCHAR"/>
-    <result column="apply_name" property="applyName" jdbcType="VARCHAR"/>
-    <result column="invention_name" property="inventionName" jdbcType="VARCHAR"/>
-    <result column="law_status" property="lawStatus" jdbcType="VARCHAR"/>
-    <result column="patent_type" property="patentType" jdbcType="VARCHAR"/>
-    <result column="inventor_name" property="inventorName" jdbcType="VARCHAR"/>
-    <result column="modifier_name" property="modifierName" jdbcType="VARCHAR"/>
-    <result column="account_id" property="accountId" jdbcType="VARCHAR"/>
-    <result column="is_check" property="isCheck" jdbcType="INTEGER"/>
-    <result column="is_new" property="isNew" jdbcType="INTEGER"/>
-    <result column="mark" property="mark" jdbcType="VARCHAR"/>
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-    <result column="is_use" property="isUse" jdbcType="INTEGER"/>
-</resultMap>
+    <resultMap id="BaseResultMap" type="com.sxf.entity.CaseInformation">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="batch" property="batch" jdbcType="VARCHAR"/>
+        <result column="case_id" property="caseId" jdbcType="VARCHAR"/>
+        <result column="apply_no" property="applyNo" jdbcType="VARCHAR"/>
+        <result column="apply_date" property="applyDate" jdbcType="TIMESTAMP"/>
+        <result column="tec_contact" property="tecContact" jdbcType="VARCHAR"/>
+        <result column="apply_name" property="applyName" jdbcType="VARCHAR"/>
+        <result column="invention_name" property="inventionName" jdbcType="VARCHAR"/>
+        <result column="law_status" property="lawStatus" jdbcType="VARCHAR"/>
+        <result column="patent_type" property="patentType" jdbcType="VARCHAR"/>
+        <result column="inventor_name" property="inventorName" jdbcType="VARCHAR"/>
+        <result column="modifier_name" property="modifierName" jdbcType="VARCHAR"/>
+        <result column="account_id" property="accountId" jdbcType="VARCHAR"/>
+        <result column="is_check" property="isCheck" jdbcType="INTEGER"/>
+        <result column="is_new" property="isNew" jdbcType="INTEGER"/>
+        <result column="mark" property="mark" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="is_use" property="isUse" jdbcType="INTEGER"/>
+    </resultMap>
 
-<resultMap id="ResultMap" type="com.sxf.entity.TargetAndCaseInfoDTO">
-    <result column="target_id" property="targetId" jdbcType="VARCHAR"/>
-    <result column="case_id" property="caseId" jdbcType="VARCHAR"/>
-    <result column="law_status" property="lawStatus" jdbcType="VARCHAR"/>
-    <result column="apply_date" property="applyDate" jdbcType="TIMESTAMP"/>
-    <result column="inventor_name" property="inventorName" jdbcType="VARCHAR"/>
-    <result column="modifier_name" property="modifierName" jdbcType="VARCHAR"/>
-    <result column="apply_no" property="applyNo" jdbcType="VARCHAR"/>
-    <result column="invention_name" property="inventionName" jdbcType="VARCHAR"/>
-    <result column="apply_name" property="applyName" jdbcType="VARCHAR"/>
-    <result column="tec_contact" property="tecContact" jdbcType="VARCHAR"/>
-    <result column="mark" property="mark" jdbcType="VARCHAR"/>
-</resultMap>
+    <resultMap id="ResultMap" type="com.sxf.entity.TargetAndCaseInfoDTO">
+        <result column="target_id" property="targetId" jdbcType="VARCHAR"/>
+        <result column="case_id" property="caseId" jdbcType="VARCHAR"/>
+        <result column="law_status" property="lawStatus" jdbcType="VARCHAR"/>
+        <result column="apply_date" property="applyDate" jdbcType="TIMESTAMP"/>
+        <result column="inventor_name" property="inventorName" jdbcType="VARCHAR"/>
+        <result column="modifier_name" property="modifierName" jdbcType="VARCHAR"/>
+        <result column="apply_no" property="applyNo" jdbcType="VARCHAR"/>
+        <result column="invention_name" property="inventionName" jdbcType="VARCHAR"/>
+        <result column="apply_name" property="applyName" jdbcType="VARCHAR"/>
+        <result column="tec_contact" property="tecContact" jdbcType="VARCHAR"/>
+        <result column="mark" property="mark" jdbcType="VARCHAR"/>
+    </resultMap>
 
-    <insert id="addCaseInfo" parameterType="com.sxf.entity.CaseInformation" >
+    <resultMap id="Result" type="com.sxf.entity.CaseStatus">
+        <result column="case_id" property="caseId" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="apply_date" property="applyDate" jdbcType="TIMESTAMP"/>
+        <result column="inventor_name" property="inventorName" jdbcType="VARCHAR"/>
+        <result column="modifier_name" property="modifierName" jdbcType="VARCHAR"/>
+        <result column="apply_no" property="applyNo" jdbcType="VARCHAR"/>
+        <result column="invention_name" property="inventionName" jdbcType="VARCHAR"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="is_use" jdbcType="INTEGER" property="isUse"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <insert id="addCaseInfo" parameterType="com.sxf.entity.CaseInformation">
         insert into `case_information`
-        <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="id != null" >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
                 `id`,
             </if>
-            <if test="batch != null" >
+            <if test="batch != null">
                 `batch`,
             </if>
-            <if test="caseId != null" >
+            <if test="caseId != null">
                 `case_id`,
             </if>
-            <if test="applyNo != null" >
+            <if test="applyNo != null">
                 `apply_no`,
             </if>
-            <if test="applyDate != null" >
+            <if test="applyDate != null">
                 `apply_date`,
             </if>
-            <if test="tecContact != null" >
+            <if test="tecContact != null">
                 `tec_contact`,
             </if>
-            <if test="applyName != null" >
+            <if test="applyName != null">
                 `apply_name`,
             </if>
-            <if test="inventionName != null" >
+            <if test="inventionName != null">
                 `invention_name`,
             </if>
-            <if test="lawStatus != null" >
+            <if test="lawStatus != null">
                 `law_status`,
             </if>
-            <if test="patentType != null" >
+            <if test="patentType != null">
                 `patent_type`,
             </if>
-            <if test="inventorName != null" >
+            <if test="inventorName != null">
                 `inventor_name`,
             </if>
-            <if test="modifierName != null" >
+            <if test="modifierName != null">
                 `modifier_name`,
             </if>
-            <if test="accountId != null" >
+            <if test="accountId != null">
                 `account_id`,
             </if>
-            <if test="isCheck != null or isCheck == 0" >
+            <if test="isCheck != null or isCheck == 0">
                 `is_check`,
             </if>
-            <if test="isNew != null or isNew == 0" >
+            <if test="isNew != null or isNew == 0">
                 `is_new`,
             </if>
-            <if test="mark != null" >
+            <if test="mark != null">
                 `mark`,
             </if>
-            <if test="updateTime != null" >
+            <if test="updateTime != null">
                 `update_time`,
             </if>
-            <if test="createTime != null" >
+            <if test="createTime != null">
                 `create_time`,
             </if>
-            <if test="isUse != null or isUse == 0" >
+            <if test="isUse != null or isUse == 0">
                 `is_use`,
             </if>
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="id != null" >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
                 #{id,jdbcType=BIGINT},
             </if>
-            <if test="batch != null" >
+            <if test="batch != null">
                 #{batch,jdbcType=VARCHAR},
             </if>
-            <if test="caseId != null" >
+            <if test="caseId != null">
                 #{caseId,jdbcType=VARCHAR},
             </if>
-            <if test="applyNo != null" >
+            <if test="applyNo != null">
                 #{applyNo,jdbcType=VARCHAR},
             </if>
-            <if test="applyDate != null" >
+            <if test="applyDate != null">
                 #{applyDate,jdbcType=TIMESTAMP},
             </if>
-            <if test="tecContact != null" >
+            <if test="tecContact != null">
                 #{tecContact,jdbcType=VARCHAR},
             </if>
-            <if test="applyName != null" >
+            <if test="applyName != null">
                 #{applyName,jdbcType=VARCHAR},
             </if>
-            <if test="inventionName != null" >
+            <if test="inventionName != null">
                 #{inventionName,jdbcType=VARCHAR},
             </if>
-            <if test="lawStatus != null" >
+            <if test="lawStatus != null">
                 #{lawStatus,jdbcType=VARCHAR},
             </if>
-            <if test="patentType != null" >
+            <if test="patentType != null">
                 #{patentType,jdbcType=VARCHAR},
             </if>
-            <if test="inventorName != null" >
+            <if test="inventorName != null">
                 #{inventorName,jdbcType=VARCHAR},
             </if>
-            <if test="modifierName != null" >
+            <if test="modifierName != null">
                 #{modifierName,jdbcType=VARCHAR},
             </if>
-            <if test="accountId != null" >
+            <if test="accountId != null">
                 #{accountId,jdbcType=VARCHAR},
             </if>
-            <if test="isCheck != null or isCheck == 0" >
+            <if test="isCheck != null or isCheck == 0">
                 #{isCheck,jdbcType=INTEGER},
             </if>
-            <if test="isNew != null or isNew == 0" >
+            <if test="isNew != null or isNew == 0">
                 #{isNew,jdbcType=INTEGER},
             </if>
-            <if test="mark != null" >
+            <if test="mark != null">
                 #{mark,jdbcType=VARCHAR},
             </if>
-            <if test="updateTime != null" >
+            <if test="updateTime != null">
                 #{updateTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="createTime != null" >
+            <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="isUse != null or isUse == 0" >
+            <if test="isUse != null or isUse == 0">
                 #{isUse,jdbcType=INTEGER},
             </if>
         </trim>
@@ -164,12 +177,11 @@
         id,batch,case_id,apply_no,apply_date,tec_contact,apply_name,invention_name,law_status,patent_type,inventor_name,modifier_name,account_id,is_check,is_new,mark,update_time,create_time,is_use
     </sql>
 
-    <select id="getCaseInfoByCaseId"   parameterType="java.lang.String"  resultType="com.sxf.entity.CaseInformation">
+    <select id="getCaseInfoByCaseId" parameterType="java.lang.String" resultType="com.sxf.entity.CaseInformation">
         select
             id,batch,case_id,apply_no,apply_date,tec_contact,apply_name,invention_name,law_status,patent_type,inventor_name,modifier_name,account_id,is_check,is_new,mark,update_time,create_time,is_use
         from case_information where case_id=#{caseId} or apply_no=#{applyNo}
     </select>
-
 
 
     <select id="getCaseInfo" resultType="com.sxf.entity.CaseInformation">
@@ -213,6 +225,40 @@
     <select id="getCaseDetail" resultMap="ResultMap" parameterType="java.lang.String">
         select s.invention_name,t.case_id ,t.target_id ,s.apply_no ,s.apply_date,s.law_status ,s.apply_name,s.inventor_name ,s.modifier_name ,s.tec_contact,s.mark
         FROM case_information s LEFT JOIN case_target t on t.case_id = s.case_id where s.apply_no=#{applyNo}
+    </select>
+
+    <select id="getCaseStatus" resultMap="Result" parameterType="java.lang.String">
+      select   status,case_id,apply_date,invention_name,modifier_name,create_time,update_time,is_use,inventor_name,apply_no
+    FROM  case_status where apply_no = #{applyNo}
+  </select>
+
+    <select id="selectCaseExcel" parameterType="com.sxf.entity.CaseInformation" resultMap="BaseResultMap">
+
+        select s.invention_name,s.case_id,s.apply_no,s.apply_date,s.inventor_name,s.law_status,s.modifier_name from
+        case_information s
+        <where>
+            <if test="caseInformation.inventionName != null">
+                or s.invention_name =#{caseInformation.inventionName}
+            </if>
+            <if test="caseInformation.caseId != null">
+                or s.case_id =#{caseInformation.caseId}
+            </if>
+            <if test="caseInformation.applyNo != null">
+                or s.apply_no=#{caseInformation.applyNo}
+            </if>
+            <if test="caseInformation.applyDate != null">
+                or s.apply_date=#{caseInformation.applyDate}
+            </if>
+            <if test="caseInformation.inventorName != null">
+                or s.inventor_Name=#{caseInformation.inventorName}
+            </if>
+            <if test="caseInformation.lawStatus != null">
+                or s.law_status=#{caseInformation.lawStatus}
+            </if>
+            <if test="caseInformation.modifierName != null">
+                or s.modifier_name=#{caseInformation.modifierName}
+            </if>
+        </where>
     </select>
 
 </mapper>
