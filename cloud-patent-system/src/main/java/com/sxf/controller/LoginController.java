@@ -29,7 +29,7 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    //@SystemLog(methods = "登陆", module = "登陆")
+//    @SystemLog(methods = "登陆", module = "登陆")
     @PostMapping("/login")
     public Result<CaseAccount> login(HttpServletRequest request, @RequestBody CaseAccount caseAccount, HttpServletResponse response) {
         if (caseAccount == null) {
@@ -40,7 +40,7 @@ public class LoginController {
         return Result.success(token);
     }
 
-    //@SystemLog(methods = "注册", module = "用户注册")
+//    @SystemLog(methods = "注册", module = "用户注册")
     @PostMapping("/register")
     public Result<String> register(@RequestBody CaseAccount caseAccount) {
         if (caseAccount == null) {
@@ -50,7 +50,7 @@ public class LoginController {
         return Result.success(token);
     }
 
-    //@SystemLog(methods = "安全退出", module = "安全退出")
+//    @SystemLog(methods = "安全退出", module = "安全退出")
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {
         Enumeration em = request.getSession().getAttributeNames();

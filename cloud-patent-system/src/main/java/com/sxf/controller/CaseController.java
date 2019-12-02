@@ -216,6 +216,4 @@ public class CaseController {
         map.put("list", caseTarget.isEmpty() ? null : caseTarget);
         return new SuccessResult("查询成功", map);
     }
-
-
 }
